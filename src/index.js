@@ -9,12 +9,9 @@ export default {
                     let event = binding.value.event
                     let action = binding.value.action
             
-                    let actionArgs = ""
-                    if(binding.value.actionArgs){
-                        actionArgs = binding.value.actionArgs
-                    }
+                    let actionArgs = binding.value.actionArgs
                     element.addEventListener(event, function(){
-                        action(actionArgs)
+                        action(...actionArgs)
                     })
                 }
         
