@@ -10,14 +10,19 @@ npm i simple-vue-tooltip
 
 import into Vue application
 ```
-import Vue from 'vue'
+import { createApp } from 'vue'
 import Tooltip from 'simple-vue-tooltip';
+import App from './App.vue'
 ```
 
 Add module to Vue
 ```
-Vue.use(Tooltip);
+const app = createApp(App)
+app.use(Tooltip)
+app.mount('#app')
 ```
+
+> Requires Vue 3. For Vue 2 projects, install `simple-vue-tooltip@^1`.
 
 ## Usage
 Insert into html element using vue directive e.g button

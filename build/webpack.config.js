@@ -1,7 +1,7 @@
 'use strict'
-const webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
-const MiniCssExtractPlugin  = require('mini-css-extract-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin')
 const path = require('path')
 
 function resolve (dir) {
@@ -9,7 +9,7 @@ function resolve (dir) {
 }
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: './src/index.js',
   mode: 'production',
   module: {
     rules: [
@@ -18,17 +18,8 @@ module.exports = {
         use: 'vue-loader'
       }, {
         test: /\.js$/,
+        exclude: /node_modules/,
         use: 'babel-loader'
-      }, {
-        test: /\.styl(us)?$/,
-        use: [ 'vue-style-loader', 'css-loader', 'stylus-loader' ]
-      }, {
-        test: /\.css$/,
-        use: ['vue-style-loader','css-loader']
-      }, {
-        test: /\.(js|vue)$/,
-        use: 'eslint-loader',
-        enforce: 'pre'
       }, {
         test: /\.styl(us)?$/,
         use: [
@@ -37,26 +28,32 @@ module.exports = {
           'stylus-loader'
         ]
       }, {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
+      }, {
         test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
-          "css-loader",
-          "sass-loader"
+          'css-loader',
+          'sass-loader'
         ]
       }
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new MiniCssExtractPlugin(),
+    new ESLintPlugin({ extensions: ['js', 'vue'] })
   ],
   resolve: {
-    extensions: ['*', '.js', '.vue', '.json']
+    extensions: ['.js', '.vue', '.json']
   },
   output: {
     path: resolve('dist'),
     filename: 'simple-vue-tooltip.min.js',
-    libraryTarget: 'window',
-    library: 'SimpleVueTooltip'
+    library: {
+      name: 'SimpleVueTooltip',
+      type: 'window'
+    }
   }
 }
